@@ -1,0 +1,61 @@
+<!--
+  CDDL HEADER START
+  The contents of this file are subject to the terms
+  of the Common Development and Distribution License
+  (the License). You may not use this file except in
+  compliance with the License.
+
+  You can obtain a copy of the License at
+  http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
+  See the License for the specific language governing
+  permission and limitations under the License.
+
+  When distributing Covered Code, include this CDDL
+  Header Notice in each file and include the License file
+  at legal/CDDLv1.0.txt.
+  If applicable, add the following below the CDDL Header,
+  with the fields enclosed by brackets [] replaced by
+  your own identifying information:
+  "Portions Copyrighted [year] [name of copyright owner]"
+
+  Copyright 2006 Sun Microsystems Inc. All Rights Reserved
+  CDDL HEADER END
+-->
+
+<project name="Portlet Container" default="default" basedir="..">
+
+    <import file="../common.xml"/>
+
+    <property name="dist" value="dist"/>
+    <condition property="portlet_container_home" value="${portlet_container_base}" else="${basedir}">
+        <isset property="portlet_container_base"/>
+    </condition>
+    
+    <target name="default">
+        <echo message="Please call deploy-portlet task to deploy the portlet war and undeploy-portlet task to undeploy the portlet war" />
+        <echo message="Usage: ant deploy-portlet -Dportlet-war=path_of_the_portlet_war.war" />
+        <echo message="       ant undeploy-portlet -Dportlet-war=name_of_the_portlet_war" />
+    </target>
+    
+    <target name="deploy-portlet">
+        <fail message="Usage: ant deploy-portlet -Dportlet-war=path_of_the_portlet_war.war [-Droles-file=roles_file]" >
+         <condition>
+           <not>
+             <isset property="portlet-war"/>
+           </not>
+         </condition>
+       </fail>
+       <copy todir="${portlet_container_home}/autodeploy" file="${portlet-war}"/>
+    </target>
+    
+    <target name="undeploy-portlet">
+        <fail message="Usage: ant undeploy-portlet -Dportlet-war=name_of_the_portlet_war" >
+         <condition>
+           <not>
+             <isset property="portlet-war"/>
+           </not>
+         </condition>
+       </fail>
+       <delete file="${portlet_container_home}/autodeploy/${portlet-war}.war"/>
+    </target>
+</project>

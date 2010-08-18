@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CDDL HEADER START
+  The contents of this file are subject to the terms
+  of the Common Development and Distribution License 
+  (the License). You may not use this file except in
+  compliance with the License.
+  
+  You can obtain a copy of the License at
+  http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
+  See the License for the specific language governing
+  permission and limitations under the License.
+  
+  When distributing Covered Code, include this CDDL 
+  Header Notice in each file and include the License file  
+  at legal/CDDLv1.0.txt.                                                           
+  If applicable, add the following below the CDDL Header,
+  with the fields enclosed by brackets [] replaced by
+  your own identifying information: 
+  "Portions Copyrighted [year] [name of copyright owner]"
+  
+  Copyright 2009 Sun Microsystems Inc. All Rights Reserved
+  CDDL HEADER END
+-->
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    
+    <display-name>OpenPortal Portlet Container Driver</display-name>
+    
+    <context-param>
+        <param-name>com.sun.portal.container.service.PolicyService</param-name>
+        <param-value>com.sun.portal.portletcontainer.driver.policy.PolicyServiceImpl</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.sun.portal.container.service.ServiceManagerContextListenerImpl</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.sun.portal.portletcontainer.impl.PortletContainerContextListenerImpl</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.sun.portal.portletcontainer.driver.remote.WSRPContextListenerImpl</listener-class>
+    </listener>
+    
+
+    <servlet>
+        <servlet-name>PortletContainerDriverServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.DriverServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PortletContainerDesktopServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.DesktopServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PortletContainerLoginServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.LoginServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PortletContainerAdminServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.admin.AdminServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.admin.UploadServlet</servlet-class>
+        <init-param>
+            <param-name>MAX_UPLOAD_SIZE</param-name>
+            <param-value>1048576000</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PortletContainerRemoteDesktopServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.remote.RemoteDesktopServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PortletContainerTCKServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.TCKServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>WSRPTCKServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.remote.RemoteTCKServlet</servlet-class>
+    </servlet>   
+    
+    <servlet>
+        <servlet-name>WSRPConsumerResourceProxyServlet</servlet-name>
+        <servlet-class>com.sun.portal.portletcontainer.driver.remote.ResourceProxyServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>PortletContainerDriverServlet</servlet-name>
+        <url-pattern>/ospc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletContainerDriverServlet</servlet-name>
+        <url-pattern>/deploy/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletContainerDriverServlet</servlet-name>
+        <url-pattern>/undeploy/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletContainerDriverServlet</servlet-name>
+        <url-pattern>/list/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletContainerDesktopServlet</servlet-name>
+        <url-pattern>/dt/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PortletContainerRemoteDesktopServlet</servlet-name>
+        <url-pattern>/rdt/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PortletContainerAdminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PortletContainerLoginServlet</servlet-name>
+        <url-pattern>/authorized</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>    
+    
+    <servlet-mapping>
+        <servlet-name>PortletContainerTCKServlet</servlet-name>
+        <url-pattern>/tck</url-pattern>
+    </servlet-mapping>    
+    
+    <servlet-mapping>
+        <servlet-name>WSRPTCKServlet</servlet-name>
+        <url-pattern>/rtck</url-pattern>
+    </servlet-mapping>    
+    
+    <servlet-mapping>
+        <servlet-name>WSRPConsumerResourceProxyServlet</servlet-name>
+        <url-pattern>/wsrpconsumer/resourceproxy/*</url-pattern>
+    </servlet-mapping>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>SecureResource</web-resource-name>
+            <url-pattern>/authorized</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+            <role-name>role1</role-name>
+            <role-name>role2</role-name>
+            <role-name>role3</role-name>
+            <role-name>role4</role-name>
+            <role-name>role5</role-name>
+            <role-name>role6</role-name>
+            <role-name>role7</role-name>
+            <role-name>role8</role-name>
+            <role-name>role9</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>admin-realm</realm-name>
+        <form-login-config>
+            <form-login-page>/login.jsp</form-login-page>
+            <form-error-page>/error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+   <security-role>
+      <role-name>admin</role-name>
+   </security-role>
+
+   <!-- Test roles that will be supported by the Portlet Container Driver -->
+   <security-role>
+      <role-name>role1</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role2</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role3</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role4</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role5</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role6</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role7</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role8</role-name>
+   </security-role>
+
+   <security-role>
+      <role-name>role9</role-name>
+   </security-role>
+
+</web-app>

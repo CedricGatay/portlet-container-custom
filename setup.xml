@@ -1,0 +1,190 @@
+<!--
+  CDDL HEADER START
+  The contents of this file are subject to the terms
+  of the Common Development and Distribution License
+  (the License). You may not use this file except in
+  compliance with the License.
+
+  You can obtain a copy of the License at
+  http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
+  See the License for the specific language governing
+  permission and limitations under the License.
+
+  When distributing Covered Code, include this CDDL
+  Header Notice in each file and include the License file
+  at legal/CDDLv1.0.txt.
+  If applicable, add the following below the CDDL Header,
+  with the fields enclosed by brackets [] replaced by
+  your own identifying information:
+  "Portions Copyrighted [year] [name of copyright owner]"
+
+  Copyright 2006 Sun Microsystems Inc. All Rights Reserved
+  CDDL HEADER END
+-->
+
+<project name="Portlet Container Setup" default="prepare" basedir=".">  
+    <import file="common.xml"/>
+
+    <property file="config/server.info"/>
+    <property name="portlet_container_home" value="${basedir}"/>
+    <property name="passwordfile" value="passwd.txt"/>
+    <property name="WelcomePortletWar" value="WelcomePortlet.war"/>
+   
+    <target name="prepare">
+        <echo message="Please call deploy-on-glassfish task to deploy the Portlet Container on GlassFish"/>
+    </target>
+
+    <target name="check-glassfish">
+        <condition property="ext" value=".bat" else ="">
+            <os family="windows"/>
+        </condition>
+        <fail message="Invalid GLASSFISH_HOME in ${portlet_container_home}/config/server.info">
+            <condition>
+                <not>
+                    <isfileselected file="asadmin${ext}">
+                        <present targetdir="${SERVER_HOME}/../../bin"/>
+                    </isfileselected>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="deploy-on-glassfish" depends="check-glassfish">
+        <mkdir dir="${SERVER_HOME}/lib"/>
+        <copy todir="${SERVER_HOME}/lib">
+            <fileset dir="lib">
+               <include name="**/*.jar"/> 
+               <exclude name="**/*standard*"/> 
+               <exclude name="**/*jstl*"/> 
+            </fileset>
+        </copy>
+        <mkdir dir="${SERVER_HOME}/autodeploy"/>
+        <copy todir="${SERVER_HOME}/autodeploy">
+            <fileset dir="${portlet_container_home}/driver" includes="*.war"/>
+        </copy>
+        <copy todir="${portlet_container_home}/autodeploy">
+            <fileset dir="${portlet_container_home}/samples" includes="*.war"/>
+        </copy>        
+        <echo message="Successfully installed portlet container. Restart Glassfish" />
+    </target>
+      
+    <target name="uninstall-pc">
+        <delete>
+            <fileset dir="${SERVER_HOME}/lib" includes="*portlet*.jar, *container*.jar, sdkinstall*.jar, commons-fileupload*.jar, commons-io*.jar, ccpp*.jar"/>
+            <fileset dir="${SERVER_HOME}/autodeploy" includes="portletdriver.war"/>
+            <fileset dir="${SERVER_HOME}/autodeploy" includes="${WelcomePortletWar}"/>
+            <fileset dir="${SERVER_HOME}/lib/classes" includes="ContainerConfig.properties"/>
+        </delete>        
+        <delete dir="${SERVER_HOME}/config/portletdriver"/>
+        <delete dir="${SERVER_HOME}/portlet-container"/>
+    </target>
+  
+    <target name="check-tomcat-config">
+        <fail message="Invalid SERVER_HOME in ${portlet_container_home}/config/server.info">
+            <condition>
+                <not>
+                    <isfileselected file="server.xml">
+                        <present targetdir="${SERVER_HOME}/conf"/>
+                    </isfileselected>
+                </not>
+            </condition>
+        </fail>
+    </target>
+    
+    <target name="deploy-on-tomcat5" depends="check-tomcat-config">
+        <copy todir="${SERVER_HOME}/common/lib">
+            <fileset dir="lib" includes="*.jar"/>
+        </copy>
+        <copy todir="${SERVER_HOME}/webapps">
+            <fileset dir="${portlet_container_home}/driver" includes="*.war"/>
+        </copy>
+        <copy todir="${portlet_container_home}/autodeploy">
+            <fileset dir="${portlet_container_home}/samples" includes="*.war"/>
+        </copy>        
+    </target>
+	
+    <target name="deploy-on-tomcat6" depends="check-tomcat-config">
+        <copy todir="${SERVER_HOME}/lib">
+            <fileset dir="lib" includes="*.jar"/>
+        </copy>
+        <copy todir="${SERVER_HOME}/webapps">
+            <fileset dir="${portlet_container_home}/driver" includes="*.war"/>
+        </copy>
+        <copy todir="${portlet_container_home}/autodeploy">
+            <fileset dir="${portlet_container_home}/samples" includes="*.war"/>
+        </copy>        
+    </target>
+    
+    <target name="uninstall-pc-on-tomcat">
+        <delete failonerror="false">
+            <fileset dir="${SERVER_HOME}/common/lib" includes="*portlet*.jar, *container*.jar, sdkinstall*.jar, commons-fileupload*.jar, commons-io*.jar, ccpp*.jar, jstl*.jar, standard*.jar"/>
+            <fileset dir="${SERVER_HOME}/lib" includes="*portlet*.jar, *container*.jar, sdkinstall*.jar, commons-fileupload*.jar, commons-io*.jar, ccpp*.jar, jstl*.jar, standard*.jar"/>
+            <fileset dir="${SERVER_HOME}/webapps" includes="portletdriver.war"/>
+            <fileset dir="${SERVER_HOME}/webapps" includes="${WelcomePortletWar}"/>
+        </delete>        
+        <delete file="${SERVER_HOME}/conf/Catalina/localhost/portletdriver.xml"/>
+        <delete dir="${SERVER_HOME}/portlet-container"/>
+    </target>
+	
+    <target name="check-jetty-config">
+        <fail message="Invalid SERVER_HOME in ${portlet_container_home}/config/server.info">
+            <condition>
+                <not>
+                    <isfileselected file="start.jar">
+                        <present targetdir="${SERVER_HOME}"/>
+                    </isfileselected>
+                </not>
+            </condition>
+        </fail>
+    </target>
+    
+    <target name="deploy-on-jetty" depends="check-jetty-config">
+        <copy todir="${SERVER_HOME}/lib/ext">
+            <fileset dir="lib">
+               <include name="**/*.jar"/> 
+               <exclude name="**/*standard*"/> 
+               <exclude name="**/*jstl*"/> 
+            </fileset>
+        </copy>
+        <copy todir="${SERVER_HOME}/webapps">
+            <fileset dir="${portlet_container_home}/driver" includes="*.war"/>
+        </copy>
+        <copy todir="${portlet_container_home}/autodeploy">
+            <fileset dir="${portlet_container_home}/samples" includes="*.war"/>
+        </copy>        
+    </target>
+    
+    <target name="uninstall-pc-on-jetty">
+        <delete failonerror="false">
+            <fileset dir="${SERVER_HOME}/lib/ext" includes="*portlet*.jar, *container*.jar, sdkinstall*.jar, commons-fileupload*.jar, commons-io*.jar, ccpp*.jar"/>
+            <fileset dir="${SERVER_HOME}/webapps" includes="portletdriver.war"/>
+            <fileset dir="${SERVER_HOME}/webapps" includes="${WelcomePortletWar}"/>
+        </delete>        
+        <delete dir="${SERVER_HOME}/portlet-container"/>
+    </target>
+
+    <target name="deploy-on-weblogic">
+        <copy todir="${SERVER_HOME}/lib">
+            <fileset dir="lib">
+               <include name="**/*.jar"/> 
+               <exclude name="**/*standard*"/> 
+               <exclude name="**/*jstl*"/> 
+            </fileset>
+        </copy>
+        <copy todir="${SERVER_HOME}/autodeploy">
+            <fileset dir="${portlet_container_home}/driver" includes="*.war"/>
+        </copy>
+        <copy todir="${portlet_container_home}/autodeploy">
+            <fileset dir="${portlet_container_home}/samples" includes="*.war"/>
+        </copy>        
+    </target>
+    
+    <target name="uninstall-pc-on-weblogic">
+        <delete failonerror="false">
+            <fileset dir="${SERVER_HOME}/lib" includes="*portlet*.jar, *container*.jar, sdkinstall*.jar, commons-fileupload*.jar, commons-io*.jar, ccpp*.jar"/>
+            <fileset dir="${SERVER_HOME}/autodeploy" includes="portletdriver.war"/>
+        </delete>        
+        <delete dir="${SERVER_HOME}/portlet-container"/>
+    </target>
+
+</project>

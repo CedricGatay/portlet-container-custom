@@ -1,0 +1,164 @@
+<!--
+  CDDL HEADER START
+  The contents of this file are subject to the terms
+  of the Common Development and Distribution License
+  (the License). You may not use this file except in
+  compliance with the License.
+
+  You can obtain a copy of the License at
+  http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
+  See the License for the specific language governing
+  permission and limitations under the License.
+
+  When distributing Covered Code, include this CDDL
+  Header Notice in each file and include the License file
+  at legal/CDDLv1.0.txt.
+  If applicable, add the following below the CDDL Header,
+  with the fields enclosed by brackets [] replaced by
+  your own identifying information:
+  "Portions Copyrighted [year] [name of copyright owner]"
+
+  Copyright 2006 Sun Microsystems Inc. All Rights Reserved
+  CDDL HEADER END
+-->
+
+<project name="Portlet Container" default="prepare" basedir=".">
+
+   <import file="common.xml"/>
+
+   <!-- Timestamp -->
+    <tstamp>
+        <format property="tstamp" pattern="yyyy.MM.dd"/>
+    </tstamp>
+    <property name="dist" value="dist"/>
+    <property name="build" value="build"/>
+    <property name="target" value="target"/>
+    <property name="portletcontainer" value="portlet-container"/>
+    <property name="portletadmin" value="admin"/>
+    <property name="driver-dist" value="driver/dist"/>
+    <property name="welcome-portlet-sample-dist" value="samples/WelcomePortlet/dist"/>
+    <property name="portlet-container-configurator-class" value="com.sun.portal.portletcontainer.installer.PortletContainerConfigurator"/>
+    <property name="installer" value="installer"/>
+    <property name="source-zip-file" value="portlet-container"/>
+    
+  <target name="prepare">
+      <echo message="Calling prepare"/>
+      <mkdir dir="${dist}"/>
+      <mkdir dir="${dist}/${portletcontainer}"/>
+      <mkdir dir="${dist}/${portletcontainer}/lib"/>
+      <mkdir dir="${dist}/${portletcontainer}/driver"/>
+      <mkdir dir="${dist}/${portletcontainer}/samples"/>
+      <mkdir dir="${dist}/${portletcontainer}/bin"/>
+      <mkdir dir="${dist}/${portletcontainer}/config"/>
+      <mkdir dir="${dist}/${portletcontainer}/autodeploy"/>
+      <copy todir="${dist}/${portletcontainer}" flatten="true">
+	  <fileset dir="${basedir}" includes="setup.xml, common.xml, install.xml, bat.xml"/>
+      </copy>
+      <copy todir="${dist}/${portletcontainer}/lib" flatten="true">
+          <fileset dir="." includes="container/dist/${container-jar}, 
+          				portletcontainer/dist/${portlet-container-jar},
+          				context/dist/${portletcontainercontext-jar},
+          				admin/dist/${portletadmin-jar}, 
+          				installer/dist/${installer-jar}" />
+          <fileset dir="${maven-local-repository}" includes="**/${portlet-api-jar}, 
+          							**/${commons-fileupload-jar}, 
+          							**/${commons-io-jar}, 
+          							**/${ccpp-jar},
+								**/${jstl-jar},
+								**/${standard-jar}"/>
+      </copy>
+      <move file="${dist}/${portletcontainer}/lib/${container-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${container.jar}"/>
+      		
+      <move file="${dist}/${portletcontainer}/lib/${portlet-container-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${portlet-container.jar}"/>
+      		
+      <move file="${dist}/${portletcontainer}/lib/${portletcontainercontext-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${portlet-container-context.jar}"/>
+      		
+      <move file="${dist}/${portletcontainer}/lib/${portletadmin-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${portletadmin.jar}"/>
+      		
+      <move file="${dist}/${portletcontainer}/lib/${installer-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${portlet-container-installer.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${portlet-api-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${portlet.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${commons-fileupload-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${commons-fileupload.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${commons-io-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${commons-io.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${ccpp-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${ccpp.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${jstl-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${jstl.jar}"/>
+
+      <move file="${dist}/${portletcontainer}/lib/${standard-jar}" 
+      		tofile="${dist}/${portletcontainer}/lib/${standard.jar}"/>
+
+      <copy todir="${dist}/${portletcontainer}/driver">
+           <fileset dir="${driver-dist}" includes="*.war"/>
+      </copy>
+      <copy todir="${dist}/${portletcontainer}/samples">
+          <fileset dir="${welcome-portlet-sample-dist}" includes="*.war"/>          
+      </copy>
+      <copy todir="${dist}/${portletcontainer}/bin" flatten="true">
+          <fileset dir="${portletadmin}" includes="**/build.xml"/>
+      </copy>
+      <copy todir="${dist}/${portletcontainer}/config" flatten="true">
+          <fileset dir="." includes="**/*.conf,**/*.template,**/DriverConfig.properties,**/portlet-policy.xml,**/PortletDeployConfig.properties"/>
+      </copy>
+      <copy todir="${dist}/${portletcontainer}" flatten="true">
+          <fileset dir="legal"/>          
+      </copy>
+      <antcall target="create-installer-jar"/>
+  </target>
+  
+  <target name="create-installer-jar">
+        <zip destfile="${dist}/${pc-zip}" basedir="${dist}/${portletcontainer}" excludesfile="install.xml"/>
+        <unjar src="${dist}/${portletcontainer}/lib/${portlet-container-installer.jar}" dest="${dist}"/>
+        <jar destfile="${dist}/${config-jar}" basedir="${dist}" includes="**/*.class,**/*.properties">
+            <include name="*.zip"/>        
+            <metainf dir="${installer}/META-INF" includes="**/*"/>
+            <manifest>
+                <attribute name="Main-Class" value="${portlet-container-configurator-class}"/>
+                <attribute name="Product" value="${product-name}"/>
+                <attribute name="Version" value="${product-version}"/>
+                <attribute name="Build-Date" value="${tstamp}"/>
+            </manifest>
+        </jar>
+        <delete dir="${dist}/com"/>
+        <delete dir="${dist}/META-INF"/>
+        <delete>
+            <fileset dir="${dist}" includes="*.zip, *.properties"/>
+        </delete>
+    </target>
+
+  <target name="zip-sources" depends="clean-source-zip">
+      <zip destfile="${source-zip-file}-${product-version}-src.zip">
+          <zipfileset dir="${basedir}" prefix="${source-zip-file}-${product-version}" 
+            excludes="**/*.class, **/*.jar, **/*.war, **/dist/**, **/.svn, **/build/**, www/**, samples/**"/>
+      </zip>
+  </target>
+  
+  <target name="clean-source-zip">
+      <delete file="${source-zip-file}-${product-version}-src.zip"/>
+  </target>
+  
+  <target name="clean">
+      <delete dir="${dist}"/>
+      <delete dir="${target}"/>
+      <delete dir="${build}"/>
+      <delete includeEmptyDirs="true">
+          <fileset dir="." includes="**/${build}/*,**/${target}/*"/>
+      </delete>
+      <delete includeEmptyDirs="true">
+          <fileset dir="." includes="**/${build},**/${target}"/>
+      </delete>
+  </target>
+
+</project>

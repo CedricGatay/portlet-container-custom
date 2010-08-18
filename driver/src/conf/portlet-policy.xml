@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-policy
+    xmlns="https://portlet-container.dev.java.net/xml/portlet-policy.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://portlet-container.dev.java.net/xml/portlet-policy.xsd"
+    version="1.0">
+
+ <event-policy>
+   <event-distribution>VISIBLE_PORTLETS_ON_PAGE</event-distribution>
+   <max-event-generation>3</max-event-generation>
+ </event-policy>
+
+ <container-event-policy>
+   <event-distribution>ALL_PORTLETS</event-distribution>
+   <max-event-generation>3</max-event-generation>
+   <event>
+     <name>login</name>
+     <status>enabled</status>
+   </event>
+   <event>
+     <name>logout</name>
+     <status>enabled</status>
+   </event>
+ </container-event-policy>
+
+ <public-render-parameter-policy>
+   <public-render-parameter-distribution>VISIBLE_PORTLETS_ON_PAGE</public-render-parameter-distribution>
+ </public-render-parameter-policy>
+
+</portlet-policy>

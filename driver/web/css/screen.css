@@ -1,0 +1,357 @@
+/*- [ general ] --------------------------- */
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Lucida Grande", Arial, Verdana, sans-serif;
+	font-size: small;
+	color: #38230E;
+}
+
+img { 
+  border:  0;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+	
+/*- [ links ] --------------------------- */
+
+a:link, a:visited {
+  color: #268CCD;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/*- [ portal-page ] --------------------------- */
+
+#portal-page {
+  font-size: 95%;
+}
+
+/*- [ portal-header ] --------------------------- */
+
+div#portal-header {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-top: 8px solid #902;
+	background: #EFE6CE;
+}
+
+div#portal-header h1 {
+  margin: 0;
+  float: left;
+  padding: 5px 10px;
+}
+
+div#portal-header ul#portal-options {
+  float: right;
+  margin: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+div#portal-header ul#portal-options li {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+div#portal-header ul#portal-options li a {
+  padding: 0 4px 0 6px;
+  border-left: 1px solid #e2c2b5;
+}
+
+div#portal-header ul#portal-options li a.first-child {
+  border-left: none;
+}
+
+/*- [ portal-tabs ] --------------------------- */
+
+div#portal-tabs {
+  clear: both;
+  margin: 0;
+  padding: 10px;
+}
+
+#portal-tablist {
+  height: 20px;
+	margin: 0;
+	padding-left: 10px;
+	background: url(../images/tab_bottom_e2c2b5.gif) repeat-x bottom;
+}
+
+#portal-tablist li {
+  margin: 0;
+  padding: 0;
+  display: inline;
+  list-style-type: none;
+}
+	
+#portal-tablist a:link, #portal-tablist a:visited {
+  float: left;
+  background: #EFE6CE;
+  line-height: 14px;
+  font-weight: normal;
+  padding: 2px 10px 2px 10px;
+  margin-right: 4px;
+  border: 1px solid #e2c2b5;
+  text-decoration: none;
+	color: #38230E;
+}
+
+#portal-tablist a:link#selected, #portal-tablist a:visited#selected {
+  border-bottom: 1px solid #fff;
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+}
+
+#portal-tablist a:hover {
+  background: #fff;
+}
+
+/*- [ admin ] --------------------------- */
+ 
+h2#deploy-failed {
+  font-weight: bold;
+  color: red;
+}
+
+h2#deploy-success {
+  font-weight: bold;
+  color: blue;
+}
+
+h2#undeploy-failed {
+  font-weight: bold;
+  color: red;
+}
+
+h2#undeploy-success {
+  font-weight: bold;
+  color: blue;
+}
+
+h2#create-failed {
+  font-weight: bold;
+  color: red;
+}
+
+h2#create-success {
+  font-weight: bold;
+  color: blue;
+}
+
+h2#modify-failed {
+  font-weight: bold;
+  color: red;
+}
+
+h2#modify-success {
+  font-weight: bold;
+  color: blue;
+}
+
+
+h1#undeploy-portlet-content {
+  margin-top: 20px;
+}
+
+h1#create-portlet-content {
+  margin-top: 20px;
+}
+
+h1#modify-window-content {
+  margin-top: 20px;
+}
+
+form#portal-login fieldset,
+form#deploy-portlet fieldset,
+form#undeploy-portlet fieldset,
+form#modify-window fieldset,
+form#create-portlet fieldset {
+  border: none;
+  margin: 10px;
+  padding: 0;
+}
+
+form#portal-login label,
+form#deploy-portlet label,
+form#undeploy-portlet label,
+form#modify-window label,
+form#create-portlet label { display: block; margin-bottom: 2px;}
+
+form#portal-login input,
+form#deploy-portlet input,
+form#undeploy-portlet select,
+form#modify-window select,
+form#create-portlet select,
+form#create-portlet input { display: block; padding: 0; margin: 0;margin-bottom: 10px;}
+
+form#portal-login input#submit,
+form#portal-login input#reset { display: inline; margin: 0;}
+
+/*- [ portal-content ] --------------------------- */
+
+#portal-content {
+  clear: both;
+  margin: 0;
+  padding: 10px;
+}
+
+h1.portal-content-header {
+  margin:  0;
+  margin-bottom: 10px;
+  padding: 0;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #902;
+}
+
+
+/*- [ portal-change-layout ] --------------------------- */
+
+#portal-content-layout {
+  clear: both;
+  margin: 0;
+  padding: 10px 0;
+}
+
+form#portal-content-change-layout {
+  float: right;
+  margin-top: -10px;
+  font-size: 93%;
+}
+
+form#portal-content-change-layout select {
+  font-size: 93%;
+}
+
+
+/*- [ portlet-content-layout ] --------------------------- */
+
+#portal-content-layout #full-top,
+#portal-content-layout #full-bottom {
+  clear: both;
+  /* background: #4D6680; */
+}
+
+/* Layout = 1, THICK/THIN */
+
+#portal-content-layout #layout-1-thin {
+  float: left;
+  width: 30%;
+  margin-right: 5%;
+  /* background: #B5CCE3; */
+}
+
+#portal-content-layout #layout-1-thick {
+  float: right;
+  width: 63%;
+  /* background: #EDF2F8; */
+}
+
+/* Layout = 2, THICK/THIN */
+
+#portal-content-layout #layout-2-thick {
+  float: left;
+  width: 63%;
+  margin-right: 5%;
+  /* background: #EDF2F8; */
+}
+
+#portal-content-layout #layout-2-thin {
+  float: right;
+  width: 30%;
+  /* background: #B5CCE3; */
+}
+
+/* Layout = 3, THIN/THICK/THIN */
+
+#portal-content-layout #layout-3-left {
+  float: left;
+  width: 68%;
+}
+
+#portal-content-layout #layout-3-left-thin {
+  float: left;
+  width: 30%;
+  margin-right: 5%;
+  /* background: #B5CCE3; */
+}
+
+#portal-content-layout #layout-3-left-thick {
+  float: right;
+  width: 58%;
+  margin-right: 5%;
+  /* background: #EDF2F8; */
+}
+
+#portal-content-layout #layout-3-right-thin {
+  float: right;
+  width: 30%;
+  /* background: #B5CCE3; */
+}
+
+
+/*- [ portlet ] --------------------------- */
+
+div.portlet {
+  clear: both;
+  margin-bottom: 20px;
+}
+
+div.portlet-header {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #EFE6CE;
+  border-bottom: 2px solid #902;
+}
+
+h2.portlet-title {
+  float: left;
+  margin:  0;
+  padding:5px 8px 0 8px;
+  font-size: 110%;
+  font-weight: normal;
+}
+
+ul.portlet-options {
+  float: right;
+  margin: 0;
+  margin-right: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+ul.portlet-options li {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+ul.portlet-options li a { float: left; display: block; height: 16px; width: 16px; margin: 4px 2px 4px 0; padding: 0; font-size: 83%; }
+ul.portlet-options li a:hover { background-color: #fff; }
+
+div.portlet-content {
+  clear: both;
+  padding: 4px;
+  border:  1px solid #FAEFEB;
+  border-top: none;
+}
+
+div.portlet-content-minimized {
+  clear: both;
+}
+
+
+

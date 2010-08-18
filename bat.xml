@@ -1,0 +1,88 @@
+<!--
+  CDDL HEADER START
+  The contents of this file are subject to the terms
+  of the Common Development and Distribution License
+  (the License). You may not use this file except in
+  compliance with the License.
+
+  You can obtain a copy of the License at
+  http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
+  See the License for the specific language governing
+  permission and limitations under the License.
+
+  When distributing Covered Code, include this CDDL
+  Header Notice in each file and include the License file
+  at legal/CDDLv1.0.txt.
+  If applicable, add the following below the CDDL Header,
+  with the fields enclosed by brackets [] replaced by
+  your own identifying information:
+  "Portions Copyrighted [year] [name of copyright owner]"
+
+  Copyright 2006 Sun Microsystems Inc. All Rights Reserved
+  CDDL HEADER END
+-->
+
+<project name="Portlet Container BAT Test" default="test-portlet-container" basedir=".">  
+    <property name="lib" value="lib"/>
+    <property name="hostname" value="localhost"/>
+    <property name="port" value="8080"/>
+    <property name="context" value="portletdriver"/>
+    <property name="path" value="dt"/>
+    <property name="portlet-path" value="ospc?pc.portletId"/>
+    <property name="bin" value="bin"/>
+    <property name="deploy-script" value="${bin}/build.xml"/>
+    <property file="config/pcenv.conf"/>
+    <property name="DOMAIN" value="domains/domain1"/>
+    
+    <target name="test-portlet-container" depends="test-availability, test-deploy, test-undeploy">
+        <echo message="BAT passed successfully. Portlet Container is proper :)"/>
+    </target>
+    
+    <target name="test-availability">
+        <condition property="available">
+            <http url="http://${hostname}:${port}/${context}/${path}"/>
+        </condition>
+        <fail unless="available" 
+            message="BAT Failed. Portlet Container is not accessible at http://${hostname}:${port}/${context}/${path}" />
+        <echo message="The Portlet Container is up and running at http://${hostname}:${port}/${context}/${path}"/>
+    </target>
+    
+    <target name="test-deploy" >
+        <fail unless="war-name" 
+            message="BAT failed. No Portlet war name provided to be deployed. Please provide the portlet war as -Dwar-name={portlet.war}"/>
+<!--        <fail unless="portlet-name" 
+            message="BAT failed. No Portlet name provided to be deployed. Please provide the portlet war as -Dwar-name={portlet.war} -Dportlet-name={portlet.name}"/> -->
+        <ant antfile="${deploy-script}" target="deploy-portlet">
+            <property name="portlet-war" value="${war-name}"/>
+        </ant>
+        <basename property="deployed-war" file="${war-name}"/>
+        <condition property="deployed">
+            <available file="${deployed-war}" filepath="${GLASSFISH_HOME}/${DOMAIN}/autodeploy"/>
+            <!--<http url="http://${hostname}:${port}/${context}/${portlet-path}=${portlet-name}"/>-->
+        </condition>
+        <fail unless="deployed" 
+            message="BAT Failed. Portlet ${war-name} could not be deployed." />
+        <echo message="Portlet ${war-name} was deployed successfully."/>
+    </target>
+    
+    <target name="test-undeploy">
+        <fail unless="war-name" 
+            message="BAT failed. No Portlet war name provided to be undeployed. Please provide the portlet war as -Dwar-name={portlet.war}"/>
+        <!--<fail unless="portlet-name" 
+            message="BAT failed. No Portlet name provided to be deployed. Please provide the portlet war as -Dwar-name={portlet.war} -Dportlet-name={portlet.name}"/> -->
+        <basename file="${war-name}" property="deployed-name" suffix=".war"/>
+        <ant antfile="${deploy-script}" target="undeploy-portlet">
+            <property name="portlet-war" value="${deployed-name}"/>
+        </ant>
+        <condition property="undeployed">
+            <not>
+                <available file="${portlet-war}" filepath="${GLASSFISH_HOME}/${DOMAIN}/autodeploy"/>
+                <!--<http  url="http://${hostname}:${port}/${context}/${portlet-path}=${portlet-name}"/>-->
+            </not>
+        </condition>
+        <fail unless="undeployed" 
+            message="BAT Failed. Portlet war ${deployed-name} could not be undeployed." />
+        <echo message="Portlet war ${deployed-name} was undeployed successfully."/>
+    </target>
+  
+</project>
