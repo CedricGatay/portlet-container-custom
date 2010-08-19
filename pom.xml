@@ -37,7 +37,7 @@
         <module>context</module>
         <module>admin</module>
         <module>driver</module>
-        <module>samples</module>
+        <!--<module>samples</module>-->
         <module>installer</module>
     </modules>
 
@@ -51,10 +51,10 @@
         </plugins>
     </reporting>
 
-    <scm>
-        <connection>scm:svn:https://portlet-container.dev.java.net/svn/portlet-container/trunk/</connection>
-        <developerConnection>scm:svn:https://portlet-container.dev.java.net/svn/portlet-container/trunk/</developerConnection>
-    </scm>
+    <!--<scm>-->
+        <!--<connection>scm:svn:https://portlet-container.dev.java.net/svn/portlet-container/trunk/</connection>-->
+        <!--<developerConnection>scm:svn:https://portlet-container.dev.java.net/svn/portlet-container/trunk/</developerConnection>-->
+    <!--</scm>-->
 
     <!--  The Java Blueprints build structure -->
     <build>
@@ -78,34 +78,6 @@
         </resources>
 
         <plugins>
-	    <plugin>
-	      <groupId>org.codehaus.mojo</groupId>
-	      <artifactId>buildnumber-maven-plugin</artifactId>
-	      <version>1.0-beta-2</version>
-	      <executions>
-		<execution>
-		  <phase>validate</phase>        
-		  <goals>
-		    <goal>create</goal>
-		  </goals>
-		</execution>
-	      </executions>
-	      <configuration>
-		<doCheck>false</doCheck>
-		<doUpdate>false</doUpdate>
-	      </configuration>
-	    </plugin>
-	    <plugin>
-	        <artifactId>maven-jar-plugin</artifactId>
-	        <version>2.0</version>
-	        <configuration>
-	          <archive>
-	            <manifestEntries>
-	              <Implementation-Build>${buildNumber}</Implementation-Build>
-	            </manifestEntries>
-	          </archive>
-	        </configuration>
-	    </plugin>	
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

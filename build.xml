@@ -103,9 +103,9 @@
       <copy todir="${dist}/${portletcontainer}/driver">
            <fileset dir="${driver-dist}" includes="*.war"/>
       </copy>
-      <copy todir="${dist}/${portletcontainer}/samples">
+     <!-- <copy todir="${dist}/${portletcontainer}/samples">
           <fileset dir="${welcome-portlet-sample-dist}" includes="*.war"/>          
-      </copy>
+      </copy>-->
       <copy todir="${dist}/${portletcontainer}/bin" flatten="true">
           <fileset dir="${portletadmin}" includes="**/build.xml"/>
       </copy>
